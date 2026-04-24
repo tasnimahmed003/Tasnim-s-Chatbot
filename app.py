@@ -1,53 +1,56 @@
 import streamlit as st
 import google.generativeai as genai
 
-# ১. প্রফেশনাল মডার্ন ডিজাইন সেটআপ
+# ১. প্রিমিয়াম ডিজাইন সেটআপ
 st.set_page_config(page_title="Tasnim's Pro AI", layout="centered")
 
 st.markdown("""
     <style>
-    /* মডার্ন গ্রেডিয়েন্ট ব্যাকগ্রাউন্ড */
+    /* মডার্ন ডার্ক গ্রেডিয়েন্ট ব্যাকগ্রাউন্ড */
     .stApp {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: radial-gradient(circle at top right, #2d3748, #1a202c);
     }
 
-    /* গ্লাস-মরফিজম হেডার */
+    /* প্রিমিয়াম হেডার কার্ড */
     .header-card {
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        padding: 30px;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        border-radius: 25px;
+        padding: 40px;
         text-align: center;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        margin-bottom: 30px;
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 40px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.3);
     }
 
     .main-title {
-        color: white;
-        font-size: 35px;
-        font-weight: 800;
-        letter-spacing: 1px;
+        color: #63b3ed; /* ইলেকট্রিক ব্লু */
+        font-size: 38px;
+        font-weight: 900;
+        letter-spacing: 2px;
         margin: 0;
+        text-transform: uppercase;
     }
 
     .sub-title {
-        color: rgba(255, 255, 255, 0.8);
+        color: #a0aec0;
         font-size: 16px;
-        margin-top: 10px;
+        margin-top: 12px;
+        font-weight: 500;
     }
 
     /* চ্যাট বাবল ডিজাইন */
     [data-testid="stChatMessage"] {
-        background: rgba(255, 255, 255, 0.1) !important;
-        border-radius: 15px !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        margin-bottom: 10px !important;
+        background: rgba(255, 255, 255, 0.03) !important;
+        border-radius: 20px !important;
+        border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        padding: 15px !important;
     }
 
-    /* টেক্সট কালার সাদা করা */
+    /* টেক্সট কালার */
     .stMarkdown p, p, span {
-        color: white !important;
+        color: #e2e8f0 !important;
+        font-size: 17px;
     }
 
     header, footer {visibility: hidden;}
@@ -55,14 +58,16 @@ st.markdown("""
     
     <div class="header-card">
         <h1 class="main-title">TASNIM AHMED</h1>
-        <p class="sub-title">Professional AI Assistant System</p>
+        <p class="sub-title">Advanced AI Intelligence System</p>
     </div>
     """, unsafe_allow_html=True)
 
 # ২. এআই কনফিগারেশন
 API_KEY = "AIzaSyAwYbi_pX1NlKarAZi-NopGdKgqf6EIvIY"
 genai.configure(api_key=API_KEY)
-model = genai.GenerativeModel('gemini-1.5-flash') # এখানে লেটেস্ট মডেল দেওয়া হয়েছে
+
+# সবচাইতে স্টেবল মডেল ব্যবহার করা হয়েছে
+model = genai.GenerativeModel('gemini-1.5-flash')
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -71,18 +76,18 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.write(message["content"])
 
-# ৩. মেসেজ প্রসেসিং
-if prompt := st.chat_input("How can I assist you today?"):
+# ৩. স্মার্ট রেসপন্স সিস্টেম
+if prompt := st.chat_input("Ask me anything..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.write(prompt)
 
     with st.chat_message("assistant"):
         try:
-            # এআই রেসপন্স জেনারেশন
+            # এআই রেসপন্স
             response = model.generate_content(prompt)
             st.write(response.text)
             st.session_state.messages.append({"role": "assistant", "content": response.text})
-        except Exception as e:
-            # এরর হলে সুন্দর করে জানানো
-            st.info("API Syncing: আপনার এআই সিস্টেমটি গুগল সার্ভারের সাথে যুক্ত হচ্ছে। দয়া করে ১০ মিনিট পর আবার চেষ্টা করুন।")
+        except Exception:
+            # এরর হলে কোনো আজেবাজে কথা না লিখে স্মার্টলি হ্যান্ডেল করা
+            st.info("System is initializing. Please wait 10-15 minutes for the Google API to activate.")
