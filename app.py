@@ -1,81 +1,89 @@
 import streamlit as st
 import difflib
 
-# ১. পেজ টাইটেল এবং হেডার সেটআপ
-st.set_page_config(page_title="Tasnim's Chatbot", page_icon="💬")
+# ১. পেজ সেটআপ
+st.set_page_config(page_title="Tasnim's Chatbot", page_icon="💬", layout="centered")
 
-# CSS দিয়ে মেসেঞ্জারের মতো লুক দেওয়া (ববল ডিজাইন)
+# ২. প্রফেশনাল মডার্ন ডিজাইন (CSS)
 st.markdown("""
     <style>
-    .stChatMessage {
-        border-radius: 20px;
-        padding: 10px;
-        margin-bottom: 10px;
+    /* মেইন ব্যাকগ্রাউন্ড */
+    .stApp {
+        background-color: #f0f2f5;
     }
-    header {visibility: hidden;}
+    
+    /* হেডার ডিজাইন */
     .main-title {
         text-align: center;
-        color: #0084ff;
-        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        padding-bottom: 20px;
-        border-bottom: 1px solid #ddd;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #1c1e21;
+        padding: 20px;
+        background: white;
+        border-radius: 0 0 20px 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
     }
+
+    /* চ্যাট বাবলের ডিজাইন */
+    .stChatMessage {
+        background-color: white !important;
+        border-radius: 15px !important;
+        padding: 15px !important;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1) !important;
+        margin-bottom: 15px !important;
+    }
+
+    /* ইনপুট বক্সের স্টাইল */
+    .stChatInputContainer {
+        padding-bottom: 20px !important;
+    }
+
+    /* সাইডবার বা অপ্রয়োজনীয় মেনু হাইড করা */
+    header {visibility: hidden;}
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
     </style>
-    <h1 class="main-title">Tasnim's Chatbot</h1>
+    
+    <div class="main-title">
+        <h1 style="margin:0; font-size: 24px;">🤖 Tasnim's Chatbot</h1>
+        <p style="margin:0; color: #65676b; font-size: 14px;">Always active to help you</p>
+    </div>
     """, unsafe_allow_html=True)
 
-# ২. FAQ ডাটাবেস (এখানে ৫০০+ প্রশ্ন-উত্তর যোগ করার ফরম্যাট)
-# আমি নমুনা দিচ্ছি, আপনি এই একই প্যাটার্নে ৫০০টি পূর্ণ করবেন।
+# ৩. ডাটাবেস (এখানে তোমার আগের সব FAQ থাকবে)
 faq_data = {
-    # English Version
     "hi": "Hello! How can I help you?",
-    "what is your name": "I am Tasnim's AI Chatbot.",
-    "how are you": "I'm doing great! What about you?",
-    "bye": "Goodbye! Have a nice day.",
-    "software engineering": "It involves designing, developing, and maintaining software systems.",
-    
-    # Bangla Version
-    "হাই": "হ্যালো! আমি আপনাকে কীভাবে সাহায্য করতে পারি?",
-    "তোমার নাম কি": "আমি তাসনিমের তৈরি একটি চ্যাটবট।",
-    "কেমন আছো": "আমি ভালো আছি! আপনার খবর কি?",
-    "বিদায়": "ভালো থাকবেন, আবার কথা হবে!",
-    "সফটওয়্যার ইঞ্জিনিয়ারিং": "এটি হলো এমন একটি ক্ষেত্র যেখানে সফটওয়্যার তৈরি ও রক্ষণাবেক্ষণ নিয়ে কাজ করা হয়।",
-    
-    # --- এখানে আপনার বাকি ৫০০টি FAQ যুক্ত করুন ---
+    "আসসালামু আলাইকুম": "ওয়ালাইকুম আসসালাম! আমি আপনাকে কীভাবে সাহায্য করতে পারি?",
+    "কেমন আছো": "আমি ভালো আছি! আপনি কেমন আছেন?",
+    # ... তোমার বাকি সব ১০০০টি প্রশ্ন এখানে বসাও ...
 }
 
 def get_response(user_input):
     user_input = user_input.lower().strip()
     questions = list(faq_data.keys())
-    
-    # ইউজার ইনপুট ও ডিকশনারির প্রশ্নের মধ্যে মিল খোঁজা
     matches = difflib.get_close_matches(user_input, questions, n=1, cutoff=0.4)
-    
-    if matches:
-        return faq_data[matches[0]]
-    else:
-        return "I'm sorry, I don't have information on that. / দুঃখিত, এই বিষয়ে আমার কাছে তথ্য নেই।"
+    return faq_data[matches[0]] if matches else "Sorry, I don't know the answer. / দুঃখিত, আমি উত্তরটি জানি না।"
 
-# ৩. সেশন স্টেট (মেসেজ হিস্ট্রি রাখার জন্য)
+# ৪. সেশন স্টেট (মেসেজ হিস্ট্রি)
 if "messages" not in st.session_state:
-    st.session_state.messages = []
+    # শুরুতে একটি ওয়েলকাম মেসেজ থাকবে যাতে স্ক্রিন ফাঁকা না লাগে
+    st.session_state.messages = [
+        {"role": "assistant", "content": "হ্যালো! আমি তাসনিমের চ্যাটবট। আপনাকে কীভাবে সাহায্য করতে পারি?"}
+    ]
 
-# ৪. আগের কনভারসেশন ডিসপ্লে করা
+# ৫. চ্যাট মেসেজ ডিসপ্লে
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# ৫. চ্যাট ইনপুট (মেসেঞ্জারের মতো নিচে থাকবে)
-if prompt := st.chat_input("Start a conversation..."):
-    # ইউজারের মেসেজ সেভ ও শো করা
+# ৬. চ্যাট ইনপুট
+if prompt := st.chat_input("আপনার প্রশ্নটি এখানে লিখুন..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    # বটের রেসপন্স জেনারেট করা
     response = get_response(prompt)
     
-    # বটের মেসেজ সেভ ও শো করা
     st.session_state.messages.append({"role": "assistant", "content": response})
     with st.chat_message("assistant"):
         st.markdown(response)
