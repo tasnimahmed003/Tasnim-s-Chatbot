@@ -2,29 +2,31 @@ import streamlit as st
 import requests
 import json
 
-# ১. পেজ সেটআপ ও প্রফেশনাল ডিজাইন
+# ১. পেজ সেটআপ
 st.set_page_config(page_title="Tasnim's AI", layout="centered")
 
+# ২. প্রিমিয়াম অরেঞ্জ ট্রান্সপারেন্ট গ্লাস ডিজাইন
 st.markdown("""
     <style>
     .stApp {
         background: radial-gradient(circle at center, #1a1a1a, #000000);
     }
 
-    /* ট্রান্সপারেন্ট অরেঞ্জ গ্লাস হেডার */
+    /* গ্লাস হেডার কন্টেইনার */
     .header-container {
         text-align: center;
-        background: rgba(255, 165, 0, 0.08);
-        backdrop-filter: blur(20px);
-        padding: 30px;
-        border-radius: 20px;
+        background: rgba(255, 165, 0, 0.08); /* অরেঞ্জ ট্রান্সপারেন্সি */
+        backdrop-filter: blur(25px);
+        padding: 35px;
+        border-radius: 24px;
         border: 1px solid rgba(255, 165, 0, 0.2);
-        margin-bottom: 35px;
+        margin-bottom: 40px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.6);
     }
 
     .name-title {
         color: #ffa500;
-        font-size: 32px;
+        font-size: 28px;
         font-weight: 800;
         margin: 0;
         letter-spacing: 3px;
@@ -34,14 +36,15 @@ st.markdown("""
     .ai-subtitle {
         color: #ffffff;
         font-size: 16px;
-        margin-top: 8px;
+        font-weight: 400;
+        margin-top: 10px;
         opacity: 0.8;
     }
 
     /* চ্যাট বাবল ডিজাইন */
     [data-testid="stChatMessage"] {
         background: rgba(255, 255, 255, 0.03) !important;
-        border-radius: 15px !important;
+        border-radius: 18px !important;
         border: 1px solid rgba(255, 165, 0, 0.1) !important;
     }
 
@@ -51,11 +54,10 @@ st.markdown("""
     <div class="header-container">
         <div class="name-title">TASNIM AHMED</div>
         <div class="ai-subtitle">AI ASSISTANT</div>
-        <p style="color: rgba(255,255,255,0.4); font-size: 12px; margin-top: 10px;">আমি তাসনিমের তৈরি এআই চ্যাট বট</p>
     </div>
     """, unsafe_allow_html=True)
 
-# ২. Groq API কানেকশন (পৃথিবীর দ্রুততম এআই)
+# ৩. Groq API কানেকশন
 GROQ_API_KEY = "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"
 URL = "https://api.groq.com/openai/v1/chat/completions"
 
@@ -67,7 +69,7 @@ def get_groq_response(user_input):
     data = {
         "model": "llama3-8b-8192",
         "messages": [
-            {"role": "system", "content": "You are a helpful AI assistant created by Tasnim Ahmed."},
+            {"role": "system", "content": "You are a helpful AI assistant created by Tasnim Ahmed. Answer clearly and professionally."},
             {"role": "user", "content": user_input}
         ]
     }
@@ -77,11 +79,11 @@ def get_groq_response(user_input):
         if response.status_code == 200:
             return response.json()['choices'][0]['message']['content']
         else:
-            return f"Error: {response.status_code}. API কী-তে সমস্যা হতে পারে।"
+            return "Please wait a few minutes."
     except:
-        return "Connection error."
+        return "Connection error. Please try again."
 
-# ৩. চ্যাট সিস্টেম
+# ৪. চ্যাট ইন্টারফেস
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
