@@ -38,11 +38,6 @@ st.markdown("""
 
 # ৩. ডাটাবেস
 faq_data = {
-    # --- সাধারণ আড্ডা (বাংলা) ---
-    # --- Social & Chitchat ---
-        # --- Greetings & Casual (English, Bangla, Banglish) ---
-    faq_data = {
-        # --- নতুন আড্ডা ও ফানি (Bangla/Banglish) ---
         "ki khobor dost": "Ei to dost, bhalo. Tor ki obostha?",
         "khobor ki": "Sob bhaloi, tor din kal kemon katche?",
         "tumi ki ragi": "Na na, ami khub e shanto ekta chatbot!",
@@ -77,6 +72,24 @@ faq_data = {
         "manush keno kotha bole": "Jogajog korar jonno manush bhasha use kore kotha bole.",
         "sabun keno fena hoy": "Sabun-er moddhe thaka chemical panir sathe mishle fena toiri kore.",
 
+        # --- খাবার ও রুচি (Food) ---
+        "tomar favorite khabar ki": "Ami to software, amar favorite khabar holo 'Data'!",
+        "biryani naki kacchi": "Kacchi-r fan base Bangladesh-e shobcheye beshi!",
+        "cha naki kofi": "Cha holo Bangalider priti, kintu kofi o darun.",
+        "ki khele buddhi bare": "Pushtikor khabar khan r protidin notun kisu shikhen.",
+
+        # --- জীবন ও দর্শন (Life Lessons) ---
+        "manush keno jhogra kore": "Moter omil thakle manush jhogra kore, kintu amader dhoirjo dhora dorkar.",
+        "ki korle boro hoa jay": "Kothin porishrom r shotota thakle boro hoa jay.",
+        "shukhi hoar upay ki": "Nijer kache ja ache tai niye tusto thakun.",
+        "tumi ki bishshash koro": "Ami logic-e bishshash kori.",
+
+        # --- বিদায় ও সমাপ্তি ---
+        "abar kotha hobe": "Oboshshoi! Ami apnar jonno eikhane thakbo.",
+        "ok bye": "Goodbye! Take care.",
+        "shuvo biday": "Biday! Din ti bhalo katuk.",
+        "ami ekhon jachchi": "Thik ache, bhalo thakben. Allah Hafez.",
+        "stay safe": "You too! Take care of yourself.",
         # --- খাবার ও রুচি (Food) ---
         "hi": "Hello! How can I help you?",
         "hello": "Hi there! What's on your mind?",
