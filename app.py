@@ -38,6 +38,46 @@ st.markdown("""
 
 # ৩. ডাটাবেস
 faq_data = {
+        "shopping korte bhalobasho": "Ami to robot, kintu apnar jonno bhalo deal khuje dite pari!",
+        "best budget phone": "Ekhon Xiaomi r Samsung-er budget phone gulo darun.",
+        "online shopping kemon": "Somoy bachate online shopping bhalo, kintu review dekhe kinben.",
+        "taka jomanor upay ki": "Oproyojoniyo khoroch koman r protimash e kisu taka save koren.",
+        "best laptop for students": "Students-der jonno MacBook air ba HP/Dell-er budget series bhalo.",
+
+        # --- ভ্রমণ ও জায়গা (Travel & Places) ---
+        "kothay ghura bhalo": "Bangladesh-e thakle Cox's Bazar ba Sylhet ghure aste paren.",
+        "travel korte ki ki lage": "Bag, kisu proyojoniyo oshudh, r ekta power bank oboshshoi niben.",
+        "pahad naki somudro": "Ami software, kintu manush pahad r somudro duitoi bhalobashe.",
+        "dhakar bhalu jaiga": "Hatirjheel ba Purbachal-e bikel bela ghura bhalo.",
+        "sajek kemon": "Sajek khub e sundor, bisesh kore megh dekhar jonno.",
+
+        # --- বিনোদন ও শখ (Entertainment & Hobby) ---
+        "best movie konta": "Apnar jodi Sci-Fi bhalo lage, tobe Interstellar dekhte paren.",
+        "netflix naki youtube": "Binodon-er jonno duitoi sera, kintu YouTube-e shob dhoroner video pawa jay.",
+        "tumi ki cinema dekho": "Ami cinema dekhi na, kintu shob movie-r kahini jani.",
+        "gaan shunle ki hoy": "Gaan shunle mon bhalo hoy r stress kome.",
+        "shokh ki hoa dorkar": "Shokh manush-er jibon-ke sundor kore, jemon- gardening ba drawing.",
+
+        # --- দৈনন্দিন জীবন ও সমস্যা (Life & Problems) ---
+        "bari jete hobe": "Thik ache, rastay savdhan-e jaben.",
+        "khub klanto lagche": "Ekta choto ghum din ba ek glass thanda pani khan.",
+        "rasta-e jam": "Dhakar jam khub e jontronar, ektu dhoirjo dhorun.",
+        "electricty nai": "Asha kori khub druto chole ashbe, totokkhon amar sathe kotha bolun!",
+        "exam-e voy lagche": "Voy paben na, nijer upor bishshas rakhun r bhalo kore porun.",
+
+        # --- মজাদার ও অদ্ভুত (Fun & Random) ---
+        "tumi ki ghumao": "Na, amar chokh sarakkhon khola thake!",
+        "tumi ki amake chino": "Hae, apni to Tasnim's Chatbot-er user!",
+        "tumi ki bhoot-ke voy pao": "Na, ami bhoot-e bishshas kori na, ami logic-e bishshas kori.",
+        "amake ekta magic dekhao": "Code diyei ami magic dekhi, kintu ekhane dekha jay na!",
+        "tumi ki siri-r bon": "Na na, ami to bangladeshi chatbot!",
+
+        # --- বিদায় ও অন্যান্য (Closing) ---
+        "shavdhan-e thakben": "Apni-o shavdhan-e thakben! Abar kotha hobe.",
+        "good luck": "Best of luck to you too!",
+        "see you": "See you later!",
+        "take care": "You too, take care!",
+        "keep smiling": "Always! You should keep smiling too.",
         "ki khobor dost": "Ei to dost, bhalo. Tor ki obostha?",
         "khobor ki": "Sob bhaloi, tor din kal kemon katche?",
         "tumi ki ragi": "Na na, ami khub e shanto ekta chatbot!",
