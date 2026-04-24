@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-# ১. প্রিমিয়াম অরেঞ্জ গ্লাস ডিজাইন
+# ১. প্রিমিয়াম ডিজাইন (অরেঞ্জ ট্রান্সপারেন্ট গ্লাস)
 st.set_page_config(page_title="Tasnim's AI", layout="centered")
 
 st.markdown("""
@@ -33,10 +33,10 @@ st.markdown("""
     </div>
     """, unsafe_allow_html=True)
 
-# ২. এআই পার্সোনালিটি সেটআপ
+# ২. Groq API কানেকশন উইথ মেমোরি
 API_KEY = "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"
 
-def get_ai_response(user_input):
+def get_ai_response(messages):
     url = "https://api.groq.com/openai/v1/chat/completions"
     headers = {
         "Authorization": f"Bearer {API_KEY}",
@@ -45,19 +45,9 @@ def get_ai_response(user_input):
     
     data = {
         "model": "llama-3.1-8b-instant",
-        "messages": [
-            {
-                "role": "system", 
-                "content": """তোমার নাম 'Tasnim's AI'। তুমি তাসনিম আহমেদের তৈরি একজন বুদ্ধিমান অ্যাসিস্ট্যান্ট। 
-                তোমার ব্যবহারের নিয়মাবলী:
-                ১. কথা শুরু করার সময় সবসময় 'আসসালামু আলাইকুম' বলবে। কখনোই 'নমস্কার' বা অন্য কিছু বলবে না।
-                ২. নিজেকে সবসময় 'আমি তাসনিম আহমেদের তৈরি এআই অ্যাসিস্ট্যান্ট' হিসেবে পরিচয় দেবে। 
-                ৩. ব্যবহারকারী যেই হোক না কেন, তাকে সম্মান দিয়ে মানুষের মতো সাবলীল বাংলায় কথা বলবে।
-                ৪. অতিরিক্ত রোবটিক কথাবার্তা এড়িয়ে চলবে এবং টু-দ্য-পয়েন্ট উত্তর দেবে।"""
-            },
-            {"role": "user", "content": user_input}
-        ],
-        "temperature": 0.7
+        "messages": messages,
+        "temperature": 0.7,
+        "max_tokens": 1024
     }
     
     try:
@@ -65,23 +55,32 @@ def get_ai_response(user_input):
         if response.status_code == 200:
             return response.json()['choices'][0]['message']['content']
         else:
-            return "দুঃখিত, আমি এই মুহূর্তে কানেক্ট হতে পারছি না।"
+            return "দুঃখিত, একটু পরে আবার চেষ্টা করো।"
     except:
-        return "ইন্টারনেট কানেকশন চেক করুন।"
+        return "ইন্টারনেট কানেকশন চেক করো।"
 
-# ৩. চ্যাট ইন্টারফেস
-if "chat_history" not in st.session_state:
-    st.session_state.chat_history = []
+# ৩. চ্যাট সিস্টেম এবং মেমোরি ম্যানেজমেন্ট
+if "messages" not in st.session_state:
+    # শুরুতে এআই-কে তার পরিচয় এবং স্বভাব বুঝিয়ে দেওয়া হলো
+    st.session_state.messages = [
+        {"role": "system", "content": "তুমি তাসনিম আহমেদের তৈরি এআই। তোমার নাম তাসনিম'স এআই। মানুষের মতো স্বাভাবিকভাবে কথা বলো। প্রতিবার উত্তরের শুরুতে নিজের পরিচয় দেওয়ার দরকার নেই। একবার সালাম দিলে পরেরবার সরাসরি উত্তর দিবে। বন্ধুর মতো কথা বলো।"}
+    ]
 
-for chat in st.session_state.chat_history:
-    with st.chat_message(chat["role"]):
-        st.write(chat["content"])
+# চ্যাট হিস্ট্রি ডিসপ্লে (ইউজার এবং অ্যাসিস্ট্যান্টের মেসেজগুলো দেখাবে)
+for message in st.session_state.messages:
+    if message["role"] != "system":
+        with st.chat_message(message["role"]):
+            st.write(message["content"])
 
-if prompt := st.chat_input("বার্তা লিখুন..."):
-    st.session_state.chat_history.append({"role": "user", "content": prompt})
+if prompt := st.chat_input("কথা বলুন..."):
+    # ইউজারের মেসেজ মেমোরিতে যোগ করা
+    st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.write(prompt)
+
     with st.chat_message("assistant"):
-        res = get_ai_response(prompt)
+        # পুরো মেমোরি (History) এআই-কে পাঠানো হচ্ছে
+        res = get_ai_response(st.session_state.messages)
         st.write(res)
-        st.session_state.chat_history.append({"role": "assistant", "content": res})
+        # এআই-এর উত্তর মেমোরিতে যোগ করা
+        st.session_state.messages.append({"role": "assistant", "content": res})
