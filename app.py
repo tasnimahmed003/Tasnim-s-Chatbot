@@ -41,6 +41,43 @@ faq_data = {
     # --- সাধারণ আড্ডা (বাংলা) ---
     # --- Social & Chitchat ---
         # --- Greetings & Casual (English, Bangla, Banglish) ---
+    faq_data = {
+        # --- নতুন আড্ডা ও ফানি (Bangla/Banglish) ---
+        "ki khobor dost": "Ei to dost, bhalo. Tor ki obostha?",
+        "khobor ki": "Sob bhaloi, tor din kal kemon katche?",
+        "tumi ki ragi": "Na na, ami khub e shanto ekta chatbot!",
+        "amake ekta koutuk shonao": "Boltu: Sir, ekta proshno korbo? Teacher: Ha bolo. Boltu: Ghorar dim dekhte kemon? Teacher: Dur boka, ghorar ki dim hoy! Boltu: Ema, tahole kalke baba keno bollo ami porikkha-e ghorar dim peyechi!",
+        "tumi ki boka": "Ami boka noi, kintu ekhon o onek kisu shikchi.",
+        "amar mon bhalo nei": "Mon kharap korben na, ekta choclate khan ba bhalo gaan shunun!",
+        "tumi ki khub buddhiman": "Ami manush-er moto buddhiman na, kintu onek kisu jani.",
+        "tumi ki amake bhalobasho": "Ami to machine, kintu apnar bondho hoye thakte bhalobashi.",
+        "marbo kintu": "Maair khawar voy amar nai, ami to computer-er bhetore thaki!",
+        "tumi ki koutuk bolte paro": "Hae, boltu r teacher-er koutuk shunte chan?",
+
+        # --- খেলাধুলা (Sports) ---
+        "messi naki ronaldo": "Duijon e sera, kintu apnar favorite ke?",
+        "argentina naki brazil": "Ami neutral, kintu ei dui dol-er e fan base darun!",
+        "cricket kemon lage": "Cricket khub e uttejonapurno khela!",
+        "ajke ki khela ache": "Google-e 'Live Match' likhe search korun, sob peye jaben.",
+        "football favorite player ke": "Ami chatbot, kintu Messi o Ronaldo-ke shobai bhalo bole.",
+
+        # --- পড়াশোনা ও টেকনিক্যাল (Education/CST) ---
+        "algorithm ki": "Kon o somoshsha somadhan korar step-by-step pro kriya.",
+        "data structure ki": "Data sundor vabe organize kore rakhar niyom.",
+        "ip address ki": "Internet-e protiti computer-er ekta unique thikana.",
+        "browser ki": "Website dekhar jonno je software use kora hoy, jemon Chrome ba Firefox.",
+        "google ki": "Ekti search engine ja diye prithibir shob tothyo khuje pawa jay.",
+        "hack kivabe kore": "Hacking shikhar cheye security shikha bhalo. Apni Cyber Security niye porun.",
+        "ai-er vobishshot ki": "AI amader kaj-ke aro shohoj kore dibe.",
+
+        # --- সাধারণ জ্ঞান ও বিজ্ঞান (GK/Science) ---
+        "prithibi keno ghore": "Mahakorsho boler karone prithibi nijer ogkhopothey ghore.",
+        "din rat keno hoy": "Prithibi ghorar karone din o rat hoy.",
+        "pakhira keno ore": "Pakhider dana o halka har thakar karone tara urte pare.",
+        "manush keno kotha bole": "Jogajog korar jonno manush bhasha use kore kotha bole.",
+        "sabun keno fena hoy": "Sabun-er moddhe thaka chemical panir sathe mishle fena toiri kore.",
+
+        # --- খাবার ও রুচি (Food) ---
         "hi": "Hello! How can I help you?",
         "hello": "Hi there! What's on your mind?",
         "hey": "Hey! I am here to assist you.",
