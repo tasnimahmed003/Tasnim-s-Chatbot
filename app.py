@@ -4,97 +4,58 @@ import google.generativeai as genai
 # ১. পেজ সেটআপ
 st.set_page_config(page_title="Tasnim's AI Assistant", page_icon="🤖", layout="centered")
 
-# ২. প্রফেশনাল ও মডার্ন ডিজাইন (Custom CSS)
+# ২. ডিজাইন (CSS)
 st.markdown("""
     <style>
-    /* পুরো ব্যাকগ্রাউন্ড */
-    .stApp {
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    }
-
-    /* হেডার সেকশন */
+    .stApp { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); }
     .header-container {
-        text-align: center;
-        background: rgba(255, 255, 255, 0.8);
-        padding: 30px;
-        border-radius: 20px;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        margin-bottom: 30px;
+        text-align: center; background: rgba(255, 255, 255, 0.9);
+        padding: 20px; border-radius: 20px; margin-bottom: 20px;
     }
-
-    .main-title {
-        color: #1e3a8a;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        font-size: 32px;
-        font-weight: 700;
-        margin-bottom: 5px;
-    }
-
-    .sub-title {
-        color: #4b5563;
-        font-size: 16px;
-        font-style: italic;
-    }
-
-    /* চ্যাট বাবল স্টাইল */
-    [data-testid="stChatMessage"] {
-        background-color: rgba(255, 255, 255, 0.9) !important;
-        border-radius: 20px !important;
-        padding: 15px !important;
-        margin-bottom: 15px !important;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05) !important;
-        border: 1px solid #e5e7eb !important;
-    }
-
-    /* ইনপুট বক্সের ডিজাইন */
-    .stChatInputContainer {
-        padding-bottom: 20px !important;
-    }
-
+    .main-title { color: #1e3a8a !important; font-size: 30px; font-weight: 700; }
+    [data-testid="stChatMessage"] p { color: #111827 !important; }
     header {visibility: hidden;}
     footer {visibility: hidden;}
     </style>
-    
     <div class="header-container">
         <div class="main-title">🤖 Tasnim's Personal AI</div>
-        <div class="sub-title">Developed by Tasnim Ahmed | Always active to assist you</div>
+        <p style="color: #374151;">Always active to assist you</p>
     </div>
     """, unsafe_allow_html=True)
 
 # ৩. Gemini AI কনফিগারেশন
+# এখানে তোমার সঠিক API Key টি বসানো আছে
 API_KEY = "AIzaSyAwYbi_pX1NlKarAZi-NopGdKgqf6EIvIY" 
-genai.configure(api_key=API_KEY)
-model = genai.GenerativeModel('gemini-1.5-flash')
 
-# ৪. সেশন স্টেট (চ্যাট হিস্ট্রি)
+try:
+    genai.configure(api_key=API_KEY)
+    model = genai.GenerativeModel('gemini-1.5-flash')
+except Exception as e:
+    st.error(f"Configuration Error: {e}")
+
+# ৪. সেশন স্টেট
 if "messages" not in st.session_state:
-    st.session_state.messages = [
-        {"role": "assistant", "content": "Hello! Ami Tasnim-er toiri AI assistant. Aj apnake kivabe sahayyo korte pari?"}
-    ]
+    st.session_state.messages = [{"role": "assistant", "content": "Hello! Ami Tasnim-er AI. Aj kivabe sahayyo korte pari?"}]
 
-# ৫. চ্যাট হিস্ট্রি দেখানো
+# ৫. চ্যাট হিস্ট্রি
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
-        st.write(message["content"])
+        st.markdown(f'<p style="color: #111827;">{message["content"]}</p>', unsafe_allow_html=True)
 
-# ৬. ইউজার ইনপুট ও রেসপন্স
+# ৬. ইউজার ইনপুট ও উত্তর
 if prompt := st.chat_input("Start a conversation..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
-        st.write(prompt)
+        st.markdown(f'<p style="color: #111827;">{prompt}</p>', unsafe_allow_html=True)
 
     with st.chat_message("assistant"):
         try:
-            # বটকে প্রফেশনাল পার্সোনালিটি দেওয়া
-            instruction = "You are a professional and polite AI assistant created by Tasnim Ahmed. Your responses should be intelligent, helpful, and natural. Use the same language as the user."
-            full_prompt = f"{instruction}\nUser: {prompt}"
-            
-            response = model.generate_content(full_prompt)
+            # ইনস্ট্রাকশন সেট করা
+            response = model.generate_content(f"User is talking to an AI created by Tasnim Ahmed. Answer politely: {prompt}")
             ai_response = response.text
             
-            st.write(ai_response)
+            st.markdown(f'<p style="color: #111827;">{ai_response}</p>', unsafe_allow_html=True)
             st.session_state.messages.append({"role": "assistant", "content": ai_response})
         except Exception as e:
-            st.error("Connection issue! Please check your internet or requirements.txt file.")
+            # এখানে আসল সমস্যাটা দেখাবে
+            st.error(f"আসল সমস্যাটি হলো: {e}")
