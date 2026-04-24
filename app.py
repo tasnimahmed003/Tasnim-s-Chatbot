@@ -7,7 +7,6 @@ st.set_page_config(page_title="Tasnim's AI", layout="centered")
 
 st.markdown("""
     <style>
-    /* ডার্ক ব্যাকগ্রাউন্ড */
     .stApp {
         background: radial-gradient(circle at center, #1a1a1a, #000000);
     }
@@ -15,13 +14,12 @@ st.markdown("""
     /* ট্রান্সপারেন্ট অরেঞ্জ গ্লাস হেডার */
     .header-container {
         text-align: center;
-        background: rgba(255, 165, 0, 0.08); /* ট্রান্সপারেন্ট অরেঞ্জ */
+        background: rgba(255, 165, 0, 0.08);
         backdrop-filter: blur(20px);
         padding: 30px;
         border-radius: 20px;
         border: 1px solid rgba(255, 165, 0, 0.2);
         margin-bottom: 35px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
     .name-title {
@@ -36,9 +34,7 @@ st.markdown("""
     .ai-subtitle {
         color: #ffffff;
         font-size: 16px;
-        font-weight: 400;
         margin-top: 8px;
-        letter-spacing: 1px;
         opacity: 0.8;
     }
 
@@ -59,21 +55,31 @@ st.markdown("""
     </div>
     """, unsafe_allow_html=True)
 
-# ২. সরাসরি এপিআই কানেকশন
-API_KEY = "AIzaSyAwYbi_pX1NlKarAZi-NopGdKgqf6EIvIY"
-URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={API_KEY}"
+# ২. Groq API কানেকশন (পৃথিবীর দ্রুততম এআই)
+GROQ_API_KEY = "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"
+URL = "https://api.groq.com/openai/v1/chat/completions"
 
-def get_ai_response(user_input):
-    payload = {"contents": [{"parts": [{"text": user_input}]}]}
-    headers = {'Content-Type': 'application/json'}
+def get_groq_response(user_input):
+    headers = {
+        "Authorization": f"Bearer {GROQ_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "model": "llama3-8b-8192",
+        "messages": [
+            {"role": "system", "content": "You are a helpful AI assistant created by Tasnim Ahmed."},
+            {"role": "user", "content": user_input}
+        ]
+    }
+    
     try:
-        response = requests.post(URL, headers=headers, data=json.dumps(payload))
+        response = requests.post(URL, headers=headers, json=data)
         if response.status_code == 200:
-            return response.json()['candidates'][0]['content']['parts'][0]['text']
+            return response.json()['choices'][0]['message']['content']
         else:
-            return "Please wait a few minutes."
+            return f"Error: {response.status_code}. API কী-তে সমস্যা হতে পারে।"
     except:
-        return "Connection error. Please try again."
+        return "Connection error."
 
 # ৩. চ্যাট সিস্টেম
 if "messages" not in st.session_state:
@@ -83,12 +89,12 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.write(message["content"])
 
-if prompt := st.chat_input("যেকোনো কিছু লিখুন..."):
+if prompt := st.chat_input("যেকোনো কিছু জিজ্ঞেস করুন..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.write(prompt)
 
     with st.chat_message("assistant"):
-        answer = get_ai_response(prompt)
+        answer = get_groq_response(prompt)
         st.write(answer)
         st.session_state.messages.append({"role": "assistant", "content": answer})
