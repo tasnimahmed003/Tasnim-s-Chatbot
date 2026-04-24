@@ -10,7 +10,7 @@ st.markdown("""
     .header-container {
         text-align: center;
         background: rgba(255, 136, 0, 0.1); 
-        backdrop-filter: blur(20px);
+        backdrop-filter: blur(25px);
         padding: 30px; border-radius: 20px;
         border: 1px solid rgba(255, 136, 0, 0.3);
         margin-bottom: 35px;
@@ -33,20 +33,27 @@ st.markdown("""
     </div>
     """, unsafe_allow_html=True)
 
-# ২. Groq API কানেকশন উইথ মেমোরি
+# ২. Groq API কানেকশন
 API_KEY = "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"
 
-def get_ai_response(messages):
+def get_ai_response(history):
     url = "https://api.groq.com/openai/v1/chat/completions"
     headers = {
         "Authorization": f"Bearer {API_KEY}",
         "Content-Type": "application/json"
     }
     
+    # এআই-কে স্মার্ট করার জন্য মূল নির্দেশনা (System Prompt)
+    system_message = {
+        "role": "system", 
+        "content": "You are a highly intelligent AI assistant created by Tasnim Ahmed. Speak in natural, fluent Bengali. Do not repeat yourself. Answer questions accurately based on facts. Be friendly but professional. If you don't know something, admit it politely."
+    }
+    
+    # মেমোরি এবং সিস্টেম মেসেজ একসাথে পাঠানো
     data = {
         "model": "llama-3.1-8b-instant",
-        "messages": messages,
-        "temperature": 0.7,
+        "messages": [system_message] + history,
+        "temperature": 0.6, # একুরেসি বাড়ানোর জন্য কমানো হয়েছে
         "max_tokens": 1024
     }
     
@@ -55,32 +62,27 @@ def get_ai_response(messages):
         if response.status_code == 200:
             return response.json()['choices'][0]['message']['content']
         else:
-            return "দুঃখিত, একটু পরে আবার চেষ্টা করো।"
+            return "দুঃখিত, আমি এখন উত্তর দিতে পারছি না। একটু পরে চেষ্টা করো।"
     except:
         return "ইন্টারনেট কানেকশন চেক করো।"
 
-# ৩. চ্যাট সিস্টেম এবং মেমোরি ম্যানেজমেন্ট
-if "messages" not in st.session_state:
-    # শুরুতে এআই-কে তার পরিচয় এবং স্বভাব বুঝিয়ে দেওয়া হলো
-    st.session_state.messages = [
-        {"role": "system", "content": "তুমি তাসনিম আহমেদের তৈরি এআই। তোমার নাম তাসনিম'স এআই। মানুষের মতো স্বাভাবিকভাবে কথা বলো। প্রতিবার উত্তরের শুরুতে নিজের পরিচয় দেওয়ার দরকার নেই। একবার সালাম দিলে পরেরবার সরাসরি উত্তর দিবে। বন্ধুর মতো কথা বলো।"}
-    ]
+# ৩. চ্যাট ইন্টারফেস এবং স্মৃতি
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
 
-# চ্যাট হিস্ট্রি ডিসপ্লে (ইউজার এবং অ্যাসিস্ট্যান্টের মেসেজগুলো দেখাবে)
-for message in st.session_state.messages:
-    if message["role"] != "system":
-        with st.chat_message(message["role"]):
-            st.write(message["content"])
+# আগের মেসেজগুলো দেখানো
+for chat in st.session_state.chat_history:
+    with st.chat_message(chat["role"]):
+        st.write(chat["content"])
 
-if prompt := st.chat_input("কথা বলুন..."):
-    # ইউজারের মেসেজ মেমোরিতে যোগ করা
-    st.session_state.messages.append({"role": "user", "content": prompt})
+if prompt := st.chat_input("যেকোনো প্রশ্ন করুন..."):
+    # ইউজারের মেসেজ যোগ করা
+    st.session_state.chat_history.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.write(prompt)
 
     with st.chat_message("assistant"):
-        # পুরো মেমোরি (History) এআই-কে পাঠানো হচ্ছে
-        res = get_ai_response(st.session_state.messages)
-        st.write(res)
-        # এআই-এর উত্তর মেমোরিতে যোগ করা
-        st.session_state.messages.append({"role": "assistant", "content": res})
+        # আগের সব কথা মনে রেখে উত্তর দেওয়া
+        response = get_ai_response(st.session_state.chat_history)
+        st.write(response)
+        st.session_state.chat_history.append({"role": "assistant", "content": response})
