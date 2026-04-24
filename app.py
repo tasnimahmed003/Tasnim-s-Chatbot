@@ -31,7 +31,7 @@ st.markdown("""
     </div>
     """, unsafe_allow_html=True)
 
-# ২. Groq API কানেকশন (সরাসরি এবং ফাস্ট)
+# ২. Groq API কানেকশন (Fixing the 400 Error)
 API_KEY = "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"
 
 def get_ai_response(user_input):
@@ -40,21 +40,24 @@ def get_ai_response(user_input):
         "Authorization": f"Bearer {API_KEY}",
         "Content-Type": "application/json"
     }
+    # Payload ফরম্যাট আপডেট করা হয়েছে
     data = {
         "model": "llama3-8b-8192",
         "messages": [
-            {"role": "system", "content": "You are a professional AI assistant created by Tasnim Ahmed. Respond politely."},
             {"role": "user", "content": user_input}
-        ]
+        ],
+        "temperature": 0.7
     }
     try:
-        response = requests.post(url, headers=headers, json=data, timeout=10)
+        response = requests.post(url, headers=headers, json=data, timeout=15)
         if response.status_code == 200:
             return response.json()['choices'][0]['message']['content']
         else:
-            return f"API Status: {response.status_code}. কিছুক্ষণ পর আবার চেষ্টা করো।"
-    except:
-        return "Connection error. ইন্টারনেটের সমস্যা হতে পারে।"
+            # সরাসরি এরর ডিটেইলস দেখাবে যাতে আমরা বুঝতে পারি
+            error_details = response.json().get('error', {}).get('message', 'Unknown Error')
+            return f"Error {response.status_code}: {error_details}"
+    except Exception as e:
+        return f"Connection error: {str(e)}"
 
 # ৩. চ্যাট সিস্টেম
 if "chat_history" not in st.session_state:
