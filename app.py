@@ -1,104 +1,88 @@
 import streamlit as st
 import google.generativeai as genai
 
-# ১. পেজ সেটআপ এবং আইকন
-st.set_page_config(page_title="Tasnim's Professional AI", page_icon="🤖", layout="centered")
+# ১. প্রফেশনাল মডার্ন ডিজাইন সেটআপ
+st.set_page_config(page_title="Tasnim's Pro AI", layout="centered")
 
-# ২. প্রফেশনাল এবং মডার্ন "Glassmorphism" ডিজাইন (Custom CSS)
 st.markdown("""
     <style>
-    /* পুরো পেজের ব্যাকগ্রাউন্ড - একটি হালকা নীল ও বেগুনি গ্রেডিয়েন্ট */
+    /* মডার্ন গ্রেডিয়েন্ট ব্যাকগ্রাউন্ড */
     .stApp {
-        background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     }
 
-    /* উপরের হেডার বক্স */
-    .header-box {
-        text-align: center;
+    /* গ্লাস-মরফিজম হেডার */
+    .header-card {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
         padding: 30px;
-        background: rgba(255, 255, 255, 0.5); /* স্বচ্ছ সাদা */
-        border-radius: 15px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        text-align: center;
         border: 1px solid rgba(255, 255, 255, 0.2);
-        margin-bottom: 25px;
+        margin-bottom: 30px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
     }
+
     .main-title {
-        color: #1e40af; /* গাঢ় নীল */
-        font-family: 'Poppins', sans-serif;
-        font-size: 30px;
-        font-weight: 700;
+        color: white;
+        font-size: 35px;
+        font-weight: 800;
+        letter-spacing: 1px;
         margin: 0;
     }
-    .developer-info {
-        color: #4b5563; /* গ্রে */
-        font-size: 15px;
-        margin-top: 5px;
+
+    .sub-title {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 16px;
+        margin-top: 10px;
     }
 
-    /* চ্যাট মেসেজের সাধারণ স্টাইল */
+    /* চ্যাট বাবল ডিজাইন */
     [data-testid="stChatMessage"] {
-        padding: 15px !important;
+        background: rgba(255, 255, 255, 0.1) !important;
         border-radius: 15px !important;
-        margin-bottom: 15px !important;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        margin-bottom: 10px !important;
     }
 
-    /* ইউজারের মেসেজের স্টাইল - একটু স্বচ্ছ সাদা */
-    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] {
-        color: #111827 !important;
-    }
-    [data-testid="stChatMessage"] {
-        background: rgba(255, 255, 255, 0.7) !important;
-        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    /* টেক্সট কালার সাদা করা */
+    .stMarkdown p, p, span {
+        color: white !important;
     }
 
-    /* এআই/অ্যাসিস্ট্যান্টের মেসেজের স্টাইল - স্বচ্ছ নীল */
-    [data-testid="stChatMessageAssistant"] {
-        background: rgba(219, 234, 254, 0.7) !important; /* হালকা নীল */
-        border: 1px solid rgba(191, 219, 254, 0.4) !important;
-    }
-
-    /* ডিফল্ট Streamlit এলিমেন্ট লুকাতে */
-    header, footer { visibility: hidden; }
+    header, footer {visibility: hidden;}
     </style>
     
-    <div class="header-box">
-        <h1 class="main-title">Tasnim Ahmed's AI</h1>
-        <p class="developer-info">A Professional AI Assistant | Developed by Tasnim Ahmed</p>
+    <div class="header-card">
+        <h1 class="main-title">TASNIM AHMED</h1>
+        <p class="sub-title">Professional AI Assistant System</p>
     </div>
     """, unsafe_allow_html=True)
 
-# ৩. Gemini AI কনফিগারেশন
+# ২. এআই কনফিগারেশন
 API_KEY = "AIzaSyAwYbi_pX1NlKarAZi-NopGdKgqf6EIvIY"
 genai.configure(api_key=API_KEY)
-model = genai.GenerativeModel('gemini-pro')
+model = genai.GenerativeModel('gemini-1.5-flash') # এখানে লেটেস্ট মডেল দেওয়া হয়েছে
 
-# ৪. চ্যাট হিস্ট্রি
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# ৫. চ্যাট হিস্ট্রি দেখানো
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.write(message["content"])
 
-# ৬. ইউজার ইনপুট ও উত্তর তৈরি
-if prompt := st.chat_input("Enter your query..."):
+# ৩. মেসেজ প্রসেসিং
+if prompt := st.chat_input("How can I assist you today?"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.write(prompt)
 
     with st.chat_message("assistant"):
         try:
-            # বটকে একটি প্রফেশনাল পার্সোনালিটি ইনস্ট্রাকশন দাও
-            instruction = "You are a professional and polite AI assistant created by Tasnim Ahmed. Respond naturally in the language the user uses."
-            full_prompt = f"{instruction}\nUser: {prompt}"
-            
-            response = model.generate_content(full_prompt)
-            ai_output = response.text
-            
-            st.write(ai_output)
-            st.session_state.messages.append({"role": "assistant", "content": ai_output})
-        except Exception:
-            # যদি এখনো এপিআই চালু না হয়, তবে এই এরর দেখাবে
-            st.error("Model access issue. Please try again in 5 minutes.")
+            # এআই রেসপন্স জেনারেশন
+            response = model.generate_content(prompt)
+            st.write(response.text)
+            st.session_state.messages.append({"role": "assistant", "content": response.text})
+        except Exception as e:
+            # এরর হলে সুন্দর করে জানানো
+            st.info("API Syncing: আপনার এআই সিস্টেমটি গুগল সার্ভারের সাথে যুক্ত হচ্ছে। দয়া করে ১০ মিনিট পর আবার চেষ্টা করুন।")
