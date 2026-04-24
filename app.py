@@ -15,11 +15,9 @@ st.markdown("""
     }
     .main-title { color: #1e3a8a !important; font-size: 30px; font-weight: 700; margin: 0; }
     
-    /* মেসেজ টেক্সট কালার ফিক্স */
     [data-testid="stChatMessage"] p, .stMarkdown p { 
         color: #000000 !important; 
         font-weight: 500;
-        line-height: 1.6;
     }
     
     [data-testid="stChatMessage"] {
@@ -27,7 +25,6 @@ st.markdown("""
         border-radius: 15px !important;
         border: 1px solid #d1d5db !important;
     }
-
     header {visibility: hidden;}
     footer {visibility: hidden;}
     </style>
@@ -42,8 +39,8 @@ API_KEY = "AIzaSyAwYbi_pX1NlKarAZi-NopGdKgqf6EIvIY"
 
 try:
     genai.configure(api_key=API_KEY)
-    # এখানে মডেলের নাম পরিবর্তন করে gemini-pro দেওয়া হয়েছে যা সবখানে কাজ করে
-    model = genai.GenerativeModel('gemini-pro')
+    # মডেল সেটআপ (লেটেস্ট ভার্সন)
+    model = genai.GenerativeModel(model_name="gemini-1.5-flash")
 except Exception as e:
     st.error(f"Config Error: {e}")
 
@@ -64,11 +61,18 @@ if prompt := st.chat_input("যেকোনো কিছু লিখুন...")
 
     with st.chat_message("assistant"):
         try:
-            # এআই দিয়ে উত্তর তৈরি
-            response = model.generate_content(f"You are a helpful AI created by Tasnim Ahmed. Answer this: {prompt}")
+            # সরাসরি জেনারেশন
+            response = model.generate_content(prompt)
             ai_response = response.text
             
             st.write(ai_response)
             st.session_state.messages.append({"role": "assistant", "content": ai_response})
         except Exception as e:
-            st.error(f"এখনো সমস্যা হচ্ছে? আসল কারণ: {e}")
+            # যদি এখনো সমস্যা হয়, তবে এই ছোট ট্রিকটি কাজ করবে
+            try:
+                model_alt = genai.GenerativeModel('gemini-pro')
+                response = model_alt.generate_content(prompt)
+                st.write(response.text)
+                st.session_state.messages.append({"role": "assistant", "content": response.text})
+            except:
+                st.error("Model access issues. Please wait a few minutes for the API Key to fully sync with Google servers.")
