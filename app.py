@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-# ১. ডিজাইন (অরেঞ্জ ট্রান্সপারেন্ট গ্লাস)
+# ১. প্রিমিয়াম অরেঞ্জ গ্লাস ডিজাইন
 st.set_page_config(page_title="Tasnim's AI", layout="centered")
 
 st.markdown("""
@@ -17,7 +17,7 @@ st.markdown("""
     }
     .name-title { color: #ff8800; font-size: 28px; font-weight: 800; text-transform: uppercase; margin: 0; }
     .ai-subtitle { color: #ffffff; font-size: 16px; opacity: 0.8; margin-top: 5px; }
-    .made-by { color: rgba(255, 255, 255, 0.5); font-size: 13px; margin-top: 10px; font-style: italic; }
+    .made-by { color: rgba(255, 255, 255, 0.6); font-size: 13px; margin-top: 10px; font-style: italic; }
     
     [data-testid="stChatMessage"] {
         background: rgba(255, 255, 255, 0.05) !important;
@@ -33,7 +33,7 @@ st.markdown("""
     </div>
     """, unsafe_allow_html=True)
 
-# ২. Groq API কানেকশন (সঠিক উত্তরের জন্য সিস্টেম প্রম্পটসহ)
+# ২. এআই পার্সোনালিটি সেটআপ
 API_KEY = "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"
 
 def get_ai_response(user_input):
@@ -42,25 +42,34 @@ def get_ai_response(user_input):
         "Authorization": f"Bearer {API_KEY}",
         "Content-Type": "application/json"
     }
+    
     data = {
         "model": "llama-3.1-8b-instant",
         "messages": [
-            # এখানে বটকে পরিচয় করিয়ে দেওয়া হয়েছে
-            {"role": "system", "content": "তোমার নাম 'Tasnim's AI Assistant'। তুমি তাসনিম আহমেদের তৈরি। সবসময় বাংলায় সুন্দর করে কথা বলবে এবং সঠিক তথ্য দেওয়ার চেষ্টা করবে।"},
+            {
+                "role": "system", 
+                "content": """তোমার নাম 'Tasnim's AI'। তুমি তাসনিম আহমেদের তৈরি একজন বুদ্ধিমান অ্যাসিস্ট্যান্ট। 
+                তোমার ব্যবহারের নিয়মাবলী:
+                ১. কথা শুরু করার সময় সবসময় 'আসসালামু আলাইকুম' বলবে। কখনোই 'নমস্কার' বা অন্য কিছু বলবে না।
+                ২. নিজেকে সবসময় 'আমি তাসনিম আহমেদের তৈরি এআই অ্যাসিস্ট্যান্ট' হিসেবে পরিচয় দেবে। 
+                ৩. ব্যবহারকারী যেই হোক না কেন, তাকে সম্মান দিয়ে মানুষের মতো সাবলীল বাংলায় কথা বলবে।
+                ৪. অতিরিক্ত রোবটিক কথাবার্তা এড়িয়ে চলবে এবং টু-দ্য-পয়েন্ট উত্তর দেবে।"""
+            },
             {"role": "user", "content": user_input}
         ],
-        "temperature": 0.6
+        "temperature": 0.7
     }
+    
     try:
         response = requests.post(url, headers=headers, json=data, timeout=15)
         if response.status_code == 200:
             return response.json()['choices'][0]['message']['content']
         else:
-            return "দুঃখিত, একটু পরে আবার চেষ্টা করো।"
+            return "দুঃখিত, আমি এই মুহূর্তে কানেক্ট হতে পারছি না।"
     except:
-        return "Connection Error."
+        return "ইন্টারনেট কানেকশন চেক করুন।"
 
-# ৩. চ্যাট হিস্ট্রি
+# ৩. চ্যাট ইন্টারফেস
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
@@ -68,7 +77,7 @@ for chat in st.session_state.chat_history:
     with st.chat_message(chat["role"]):
         st.write(chat["content"])
 
-if prompt := st.chat_input("যেকোনো কিছু জিজ্ঞেস করো..."):
+if prompt := st.chat_input("বার্তা লিখুন..."):
     st.session_state.chat_history.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.write(prompt)
