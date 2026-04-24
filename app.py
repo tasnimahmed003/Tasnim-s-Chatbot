@@ -46,12 +46,6 @@ st.markdown("""
 
 # ৩. ডাটাবেস (এখানে তোমার ১০০০টি প্রশ্ন থাকবে)
 faq_data = {
-    "hi": "Hello! How can I help you?",
-    "hello": "Hi there!",
-    "আসসালামু আলাইকুম": "ওয়ালাইকুম আসসালাম!",
-    "কেমন আছো": "আমি ভালো আছি, আপনি কেমন আছেন?",
-    "কি করো": "আমি আপনার প্রশ্নের উত্তর দেওয়ার জন্য প্রস্তুত।",
-    faq_data = {
         # --- Greetings & Casual (English, Bangla, Banglish) ---
         "hi": "Hello! How can I help you?",
         "hello": "Hi there! What's on your mind?",
@@ -155,8 +149,6 @@ faq_data = {
         "funny joke": "Why was the computer cold? Because it left its Windows open!",
         "koutuk": "Boltu: Ma, ami ki boro hoye rasta par hote parbo? Ma: Ha baba. Boltu: Tahole ekhon rasta par hoye dokan theke chocolate niye ashi?",
     }
-    # বাকি ৫০০-১০০০টি প্রশ্ন এখানে আগের মতো বসাও
-}
 
 def get_response(user_input):
     user_input = user_input.lower().strip()
